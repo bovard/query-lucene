@@ -19,7 +19,6 @@ gulp.task('browserify', function () {
 
   return gulp.src(['client/main.jsx'])
     .pipe(browserified)
-    .pipe(uglify())
     .pipe(rename('main.js'))
     .pipe(gulp.dest('build/'));
 });
