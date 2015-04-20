@@ -33,7 +33,7 @@ module.exports = React.createClass({
                     <form className='form-horizontal' onSubmit={this.onSubmit}>
                         <Input
                             type='text'
-                            label='Search'
+                            label='Search Term'
                             ref='search'
                             labelClassName='col-xs-2'
                             wrapperClassName='col-xs-10'
@@ -46,7 +46,20 @@ module.exports = React.createClass({
                             wrapperClassName='col-xs-10'
                         >
                             <option key='json' value='json'>json</option>
-                            <option key='xml' value='xml'>json</option>
+                            <option key='xml' value='xml'>xml</option>
+                        </Input>
+
+                        <Input
+                            type='select'
+                            label='Num Results'
+                            ref='num'
+                            labelClassName='col-xs-2'
+                            wrapperClassName='col-xs-10'
+                        >
+                            <option key='10' value={10}>10</option>
+                            <option key='25' value={25}>25</option>
+                            <option key='50' value={50}>50</option>
+                            <option key='100' value={100}>100</option>
                         </Input>
                         <Input
                             type="submit"
