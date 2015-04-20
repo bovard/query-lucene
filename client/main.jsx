@@ -7,30 +7,10 @@ Backbone.$ = $;
 var Well = require('react-bootstrap').Well;
 
 var MainNav = require('./MainNav');
-var ClientList = require('./ClientList');
-var StatsList = require('./StatsList');
-var DataCollector = require('./DataCollector');
-
-var LOCAL_CLIENT_NAME = 'asdfjklCleints';
+var QueryPage = require('./QueryPage');
+var ViewBill = require('./ViewBill');
 
 var InterfaceComponent = React.createClass({
-    getInitialState: function() {
-        var localClients = localStorage.getItem(LOCAL_CLIENT_NAME);
-        try {
-            localClients = localClients.split(',');
-            localClients = localClients.filter(function(item) {
-                return !!item;
-            });
-            for (var i = 0; i < localClients.length; i++) {
-                DataCollector.startWatch(localClients[i]);
-            }
-        } catch(err) {
-            localClients = [];
-        }
-        return {
-            clients: localClients
-        };
-    },
     componentWillMount : function() {
         this.callback = (function() {
             this.forceUpdate();
@@ -38,32 +18,25 @@ var InterfaceComponent = React.createClass({
 
         this.props.router.on("route", this.callback);
     },
-    addClient: function(name) {
-        var newClients = this.state.clients;
-        DataCollector.startWatch(name);
-        newClients.push(name);
-        this.setState({clients: newClients});
-        localStorage.setItem(LOCAL_CLIENT_NAME, newClients);
-    },
     componentWillUnmount : function() {
         this.props.router.off("route", this.callback);
     },
     render: function() {
         var nav = 0;
         var content;
-        if (this.props.router.current[0] == 'home') {
+        if (this.props.router.current[0] == 'query') {
             nav = 1;
             content = (
                 <Well>
-                    <StatsList clients={this.state.clients || []} getData={DataCollector.getData} />
+                    <QueryPage />
                 </Well>
             );
         }
-        if (this.props.router.current[0] == 'urls') {
+        if (this.props.router.current[0] == 'view') {
             nav = 2;
             content = (
                 <Well>
-                    <ClientList clients={this.state.clients || []} addClient={this.addClient} />
+                    <ViewBill />
                 </Well>
             );
         }
@@ -85,7 +58,7 @@ var Router = Backbone.Router.extend({
             if (actions) {
                 this.current = actions.split('/');
             } else {
-                this.current = ["home"];
+                this.current = ["query"];
             }
         }
     },
