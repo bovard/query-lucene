@@ -8,7 +8,6 @@ var Well = require('react-bootstrap').Well;
 
 var MainNav = require('./MainNav');
 var QueryPage = require('./QueryPage');
-var ViewBill = require('./ViewBill');
 
 var InterfaceComponent = React.createClass({
     componentWillMount : function() {
@@ -29,14 +28,6 @@ var InterfaceComponent = React.createClass({
             content = (
                 <Well>
                     <QueryPage />
-                </Well>
-            );
-        }
-        if (this.props.router.current[0] == 'view') {
-            nav = 2;
-            content = (
-                <Well>
-                    <ViewBill />
                 </Well>
             );
         }

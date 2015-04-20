@@ -11,19 +11,13 @@ var moment = require('moment');
 module.exports = React.createClass({
     propTypes: {},
     getInitialState: function() {
-        return {results: []};
+        return {
+            numResults: 0,
+            results: []
+        };
     },
-    search: function(searchTerm) {
-        var options = {
-            url: 'http://http://169.54.240.116:8983/solr/gettingstarted/select?wt=json&indent=false&q=' + searchTerm,
-            method: 'GET'
-        }
-        request(options, function(err, response, body) {
-            console.log(err);
-            console.log(response);
-        })
-
-
+    onSubmit: function() {
+        var searchTerm = this.refs.search.getValue().trim()
     },
     render: function() {
         return (
@@ -36,13 +30,24 @@ module.exports = React.createClass({
                 <br />
                 <br />
                 <Well>
-                    <form className='form-horizontal'>
+                    <form className='form-horizontal' onSubmit={this.onSubmit}>
                         <Input
                             type='text'
                             label='Search'
+                            ref='search'
                             labelClassName='col-xs-2'
                             wrapperClassName='col-xs-10'
                         />
+                        <Input
+                            type='select'
+                            label='Format'
+                            ref='format'
+                            labelClassName='col-xs-2'
+                            wrapperClassName='col-xs-10'
+                        >
+                            <option key='json' value='json'>json</option>
+                            <option key='xml' value='xml'>json</option>
+                        </Input>
                         <Input
                             type="submit"
                             value="Search!"
