@@ -31,6 +31,16 @@ var InterfaceComponent = React.createClass({
                 </Well>
             );
         }
+        if (this.props.router.current[0] == 'about') {
+            nav = 2;
+            content = (
+                <Well>
+                    <span>A project for the MIDS program at UC Berkeley.</span>
+                    <br />
+                    <span>By <a href="https://www.github.com/bovard">Bovard</a></span>
+                </Well>
+            );
+        }
         return (
             <div className="content">
                 <MainNav current={nav} />

@@ -7,17 +7,40 @@ var Input = require('react-bootstrap').Input;
 var Well = require('react-bootstrap').Well;
 var moment = require('moment');
 
+var BASE_URL = 'http://169.54.240.116:8983/solr/gettingstarted/select?indent=true&';
 
 module.exports = React.createClass({
     propTypes: {},
     getInitialState: function() {
         return {
-            numResults: 0,
-            results: []
+            url: BASE_URL
         };
     },
     onSubmit: function() {
-        var searchTerm = this.refs.search.getValue().trim()
+        window.open(this.state.url);
+    },
+    prepareTerm: function(search) {
+        search = search.replace(/ /g, '+');
+        var parts = search.split('"');
+        search = parts.join('\\"');
+        return search;
+    },
+    urlBuilder: function(search, format, start, num) {
+        var url = BASE_URL;
+        url = url + '&wt=' + format;
+        url = url + '&start=' + (start || '0');
+        url = url + '&row=' + num;
+        url = url + '&q=' + this.prepareTerm(search);
+        return url;
+    },
+    onChange: function() {
+        var searchTerm = this.refs.search.getValue().trim();
+        var format = this.refs.format.getValue().trim();
+        var start = this.refs.start.getValue().trim();
+        var num = this.refs.num.getValue().trim();
+        this.setState({
+            url: this.urlBuilder(searchTerm, format, start, num)
+        });
     },
     render: function() {
         return (
@@ -30,7 +53,7 @@ module.exports = React.createClass({
                 <br />
                 <br />
                 <Well>
-                    <form className='form-horizontal' onSubmit={this.onSubmit}>
+                    <form className='form-horizontal' onSubmit={this.onSubmit} onChange={this.onChange}>
                         <Input
                             type='text'
                             label='Search Term'
@@ -48,7 +71,13 @@ module.exports = React.createClass({
                             <option key='json' value='json'>json</option>
                             <option key='xml' value='xml'>xml</option>
                         </Input>
-
+                        <Input
+                            type='text'
+                            label='Start (default: 0)'
+                            ref='start'
+                            labelClassName='col-xs-2'
+                            wrapperClassName='col-xs-10'
+                        />
                         <Input
                             type='select'
                             label='Num Results'
@@ -67,6 +96,7 @@ module.exports = React.createClass({
                             wrapperClassName="col-xs-offset-2 col-xs-2" />
                     </form>
                 </Well>
+                <span>{this.state.url}</span>
             </div>
         )
 
